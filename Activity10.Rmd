@@ -5,11 +5,13 @@ date: "2023-11-29"
 output: html_document
 ---
 
-```{r setup, include=FALSE}
+```{r setup, echo=FALSE}
 knitr::opts_chunk$set(echo = TRUE, dpi = 300)
 ```
 
-```{r imports, include=FALSE}
+```{r imports, echo=FALSE}
+# This code chunk loads packages using the groundhog library
+
 library(groundhog) # Use groundhog to roll back library versions to project date
 pkgs <- c("tidyverse", "dplyr", "ggplot2", "janitor", "knitr", "kableExtra")
 groundhog.library(pkgs, '2023-11-17')
@@ -39,25 +41,27 @@ f(3n + 1) & \text{if } n \text{ is odd} \\\\
 \end{equation}
 $
 ```
-```{r CollatzFunction}
-getCollatz <- function(n){
+```{r CollatzFunction, echo=FALSE}
+# Function that returns the stopping time of the collatz conjecture given any positive integer
+getCollatzStoppingTime <- function(n){
   if (n<=1){
     return (0) # Return 0 if n equal to one
   }
   else if (n %% 2 == 0){
-    return (1 + getCollatz(n/2)) # Return 1 plus the count of n/2
+    return (1 + getCollatzStoppingTime(n/2)) # Return 1 plus the count of n/2
   }
   else{
-    return (1 + getCollatz(3*n+1)) # Return 1 plus the count of 3n+1
+    return (1 + getCollatzStoppingTime(3*n+1)) # Return 1 plus the count of 3n+1
   }
 }
 
 ```
 
 ```{r CollatzHistogram, echo=FALSE}
+# This code chunk creates a histogram of the stopping times of the collatz conjecture
 
 # Create stopping time dataframe
-Collatz <- data.frame(stoppingTimes=sapply(X=seq(1, 10000), FUN=getCollatz)) 
+Collatz <- data.frame(stoppingTimes=sapply(X=seq(1, 10000), FUN=getCollatzStoppingTime)) 
 
 # Plot histogram
 ggplot(Collatz) +
@@ -78,6 +82,8 @@ The above histogram demonstrates the distribution of Stopping Times among the fi
 In this section, we will explore the diamonds data set from the ggplot2 package and try to find a relationship between different parameters of the diamond and the price of a diamond. The diamonds data set includes multiple parameters about its size, shape, quality, and price. Here is a preview of the data set:
 
 ```{r diamondsLoad, echo=FALSE}
+# This code chunk loads the diamonds dataset and displays it in a neat table
+
 data(diamonds)
 head(diamonds) %>%
   kable(
@@ -94,7 +100,8 @@ head(diamonds) %>%
 
 ### In particular, we will look at the relationship between Carat, Clarity, and Price.
 
-```{r diamondsFilter}
+```{r diamondsFilter, echo=FALSE}
+# This code chunk Filters and selects a subset of rows and columns of the diamonds dataset
 
 diamondsFiltered <- diamonds %>%
   select('price', 'carat', 'clarity') # Explore carat, clarity, and price
@@ -103,7 +110,9 @@ diamondsFilteredSample = slice_sample(diamondsFiltered, prop=0.3) # Sample is ta
   
 ```
 
-```{r diamondsVisualization}
+```{r diamondsVisualization, echo=FALSE}
+# This code chunk Plots the price of the diamond vs the carat of the diamond
+
 ggplot(data = diamondsFilteredSample) +
   aes(x = carat, y = price, color = clarity) + # Color represents clarity
   geom_point(
@@ -125,8 +134,11 @@ The above graph shows a positive correlation between Carat and Price. Generally,
 
 ### Summary Table
 
-```{r, warning=FALSE}
-diamondsFiltered %>%
+```{r, warning=FALSE, echo=FALSE}
+# This code chunk produces a table of the average price and average carat of the diamonds by clarity classification. 
+
+# diamondsFiltered is used here instead of diamondsFilteredSample because we do not have to avoid overplotting
+diamondsFiltered %>% 
   group_by(clarity) %>%
   summarise(
     "Average Price" = round(mean(price), digits=2), # Average Price by Clarity
