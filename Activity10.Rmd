@@ -9,7 +9,7 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE, dpi = 300)
 ```
 
-```{r imports, echo=FALSE}
+```{r imports, message=FALSE, echo=FALSE}
 # This code chunk loads packages using the groundhog library
 
 library(groundhog) # Use groundhog to roll back library versions to project date
@@ -162,3 +162,13 @@ diamondsFiltered %>%
 ## Reflections
 
 So far in this course I have learned about the RStudio environment, R programming language, and how to use R for data analysis and presentation. Specifically, I have learned how to import data through file uploads, web scraping, and loading data sets through packages in R. I have also learned how to utilize data wrangling packages such as dplyr and janitor to transform data into Tidy Data format. Lastly, I have learned how to create a myriad of visualizations that allow for visual analytics.
+
+\newpage
+
+# Code Appendix
+
+```{r codeAppedix}
+#| ref.label = knitr::all_labels(),
+#| echo = TRUE,
+#| eval = FALSE
+```
